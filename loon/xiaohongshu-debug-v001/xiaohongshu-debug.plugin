@@ -1,0 +1,18 @@
+#!name=小红书调试
+#!desc=输出小红书请求与响应 URL 到 Script 页，便于定位真实接口
+#!author=Codex
+#!version=0.0.1
+#!homepage=https://github.com/sgab611/hao4k-checkin-nodejs/tree/main/loon/xiaohongshu-debug-v001
+#!system=iOS
+#!loon_version=3.2.1(733)
+#!tag=小红书,调试
+
+[Rewrite]
+# 本插件仅用于定位请求，不修改内容。
+
+[Script]
+http-request ^https?:\/\/(?:[\w-]+\.)*(?:xiaohongshu\.com|xhscdn\.com)\/.* script-path = https://raw.githubusercontent.com/sgab611/hao4k-checkin-nodejs/main/loon/xiaohongshu-debug-v001/xhs-debug.js?v=001, timeout = 20, tag = 小红书调试请求
+http-response ^https?:\/\/(?:[\w-]+\.)*(?:xiaohongshu\.com|xhscdn\.com)\/.* script-path = https://raw.githubusercontent.com/sgab611/hao4k-checkin-nodejs/main/loon/xiaohongshu-debug-v001/xhs-debug.js?v=001, timeout = 20, tag = 小红书调试响应
+
+[MITM]
+hostname = *.xiaohongshu.com, xiaohongshu.com, *.xhscdn.com, xhscdn.com
