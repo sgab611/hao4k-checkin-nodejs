@@ -1,0 +1,24 @@
+#!name=小红书净化
+#!desc=移除开屏广告、信息流广告、推荐位广告，并提供隐藏视频贴文开关
+#!author=Codex
+#!version=1.1.0
+#!homepage=https://github.com/sgab611/hao4k-checkin-nodejs/tree/main/loon/xiaohongshu-clean-v110
+#!system=iOS
+#!loon_version=3.2.1(733)
+#!tag=小红书,去广告
+
+[Argument]
+hide_video = switch,false,tag=隐藏视频贴文,desc=开启后过滤首页与搜索流中的视频贴文
+
+[Rewrite]
+# 通过 [Script] 中的 http-response 规则处理响应体。
+
+[Script]
+# 隐藏视频开启时，优先使用包含去广告+去视频的脚本
+http-response ^https?:\/\/(?:edith|xhsapi)\.xiaohongshu\.com\/(?:api\/sns\/)?(?:v1\/feed|v2\/note\/feed|v3\/homefeed|v4\/search\/notes|v5\/homefeed|v6\/homefeed|v10\/note\/feed|v1\/search\/notes|v1\/homefeed).* script-path = https://raw.githubusercontent.com/sgab611/hao4k-checkin-nodejs/main/loon/xiaohongshu-clean-v110/xhs-hide-video.js?v=110, requires-body = true, timeout = 60, tag = 小红书隐藏视频, enable={hide_video}
+
+# 常规去广告脚本，关闭隐藏视频时仍会处理 feed、搜索、开屏等广告
+http-response ^https?:\/\/(?:edith|xhsapi)\.xiaohongshu\.com\/(?:api\/sns\/)?(?:v1\/feed|v2\/note\/feed|v3\/homefeed|v4\/search\/notes|v5\/homefeed|v6\/homefeed|v10\/note\/feed|v1\/search\/notes|v1\/homefeed|v1\/system_service\/config|v1\/splash_config|v2\/splash_config|v1\/launch|v1\/startup|v2\/startup|v1\/init).* script-path = https://raw.githubusercontent.com/sgab611/hao4k-checkin-nodejs/main/loon/xiaohongshu-clean-v110/xhs-ad-only.js?v=110, requires-body = true, timeout = 60, tag = 小红书净化
+
+[MITM]
+hostname = edith.xiaohongshu.com, xhsapi.xiaohongshu.com
